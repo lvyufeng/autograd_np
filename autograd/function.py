@@ -3,6 +3,9 @@ import numpy as np
 from autograd.tensor import Tensor,Dependency
 
 def tanh(tensor: Tensor) -> Tensor:
+    '''
+    tanh = 
+    '''
     data = np.tanh(tensor.data)
     requires_grad = tensor.requires_grad
 

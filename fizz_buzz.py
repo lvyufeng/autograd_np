@@ -34,7 +34,9 @@ class FizzBuzzModel(Module):
         self.b1 = Parameter(num_hidden)
         self.w2 = Parameter(num_hidden,4)
         self.b2 = Parameter(4)
-    
+    def forward(self, inputs: Tensor) -> Tensor:
+        return self.predict(inputs)
+
     def predict(self, inputs: Tensor) -> Tensor:
         # inputs will be (batch_size, 10)
         x1 = inputs @ self.w1 + self.b1 # (batch_size, num_hidden)
@@ -43,11 +45,11 @@ class FizzBuzzModel(Module):
 
         return x3
 
-optimizer = SGD(0.001)
 batch_size = 32
 model = FizzBuzzModel()
 print(x_train.shape)
 starts = np.arange(0, x_train.shape[0],batch_size)
+optimizer = SGD(model.parameters(),0.001)
 
 for epoch in range(5000):
    
@@ -60,7 +62,7 @@ for epoch in range(5000):
 
         model.zero_grad()
         inputs = x_train[start:end]
-        predicted = model.predict(inputs)
+        predicted = model(inputs)
         actual = y_train[start:end]
 
         errors = predicted - actual
@@ -69,7 +71,7 @@ for epoch in range(5000):
         loss.backward()
         epoch_loss += loss.data
 
-        optimizer.step(model)
+        optimizer.step()
         
     print(epoch,epoch_loss)
 

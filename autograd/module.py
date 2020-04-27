@@ -17,4 +17,9 @@ class Module:
         for parameter in self.parameters():
             parameter.zero_grad()
 
-    # def forward(self):
+    def forward(self, *input):
+        raise NotImplementedError
+
+    def __call__(self, *input, **kwargs):
+        result = self.forward(*input,**kwargs)
+        return result
