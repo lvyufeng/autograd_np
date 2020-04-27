@@ -6,4 +6,6 @@ follow Joel Grus' live coding video to implement a auto gradient framework hand 
 
 ## part 02
 1.finish tensor add function(include broadcasting method)
+=======
+
 
