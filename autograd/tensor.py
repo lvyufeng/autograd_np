@@ -1,5 +1,5 @@
 from typing import List,NamedTuple,Callable,Optional,Union
-import numpy as np
+from autograd.np import np
 
 class Dependency(NamedTuple):
     tensor: 'Tensor'

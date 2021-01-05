@@ -1,5 +1,6 @@
 from autograd.tensor import Tensor
-import numpy as np
+from autograd.np import np
+
 class Parameter(Tensor):
     def __init__(self, *shape) -> None:
         data = np.random.randn(*shape)

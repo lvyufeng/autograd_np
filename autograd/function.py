@@ -1,5 +1,4 @@
-import numpy as np
-
+from autograd.np import np
 from autograd.tensor import Tensor,Dependency
 
 def tanh(tensor: Tensor) -> Tensor:
