@@ -23,3 +23,4 @@ class SGD(Optimizer):
     def step(self) -> None:
         for parameter in self.parameters:
             parameter -= parameter.grad * self.lr
+
