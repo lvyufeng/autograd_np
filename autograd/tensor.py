@@ -1,5 +1,6 @@
 from typing import List,NamedTuple,Callable,Optional,Union
 from autograd.np import np
+from autograd.utils import *
 
 class Dependency(NamedTuple):
     tensor: 'Tensor'
@@ -7,7 +8,7 @@ class Dependency(NamedTuple):
 
 Arrayable = Union[float, list, np.ndarray]
 
-def ensure_arry(arrayable: Arrayable) -> np.ndarray:
+def ensure_array(arrayable: Arrayable) -> np.ndarray:
     if isinstance(arrayable, np.ndarray):
         return arrayable
     else:
@@ -27,7 +28,7 @@ class Tensor:
                 requires_grad: bool = False,
                 depends_on: List[Dependency] = None
     ) -> None:
-        self._data = ensure_arry(data)
+        self._data = ensure_array(data)
         self.requires_grad = requires_grad
         self.depends_on = depends_on or []
 
@@ -88,8 +89,10 @@ class Tensor:
 
     def __neg__(self) -> 'Tensor':
         return _neg(self)
+    
     def __sub__(self,other) -> 'Tensor':
         return _sub(self,ensure_tensor(other))
+        
     def __rsub__(self, other) -> 'Tensor':
         return _sub(ensure_tensor(other),self)
 
@@ -99,6 +102,7 @@ class Tensor:
     def sum(self) -> 'Tensor':
         # raise NotImplementedError
         return tensor_sum(self)
+
     def backward(self, grad: 'Tensor' = None ) -> None:
         assert self.requires_grad,"called backward on non-requires-grad tensor"
 
@@ -113,7 +117,11 @@ class Tensor:
         for dependency in self.depends_on:
             backward_grad = dependency.grad_fn(grad.data)
             dependency.tensor.backward(Tensor(backward_grad))
+    def cpu(self):
+        return to_cpu(self._data)
 
+    def cuda(self):
+        return to_gpu(self._data)
 
 
 def tensor_sum(t:Tensor) -> Tensor:

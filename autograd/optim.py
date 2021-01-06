@@ -17,6 +17,10 @@ class Optimizer:
         for group in param_group:
             self.parameters.append(group)
 
+    def zero_grad(self):
+        for parameter in self.parameters:
+            parameter.zero_grad()
+
 class SGD(Optimizer):
     def __init__(self, parameters, lr:float = 0.01) -> None:
         super(SGD,self).__init__(parameters)
