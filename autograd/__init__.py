@@ -1,4 +1,7 @@
-from autograd.tensor import Tensor
-from autograd.parameter import Parameter
-from autograd.module import Module
-from autograd.utils import *
+from .tensor import Tensor
+from .parameter import Parameter
+from .module import Module
+from .utils import *
+
+def argmax(x:'Tensor', axis, keepdims=False):
+    return Tensor(np.argmax(x.data, axis=axis, keepdims=keepdims))

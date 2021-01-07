@@ -1,6 +1,6 @@
 from typing import List,NamedTuple,Callable,Optional,Union
-from autograd.np import np
-from autograd.utils import *
+from .np import np
+from .utils import to_cpu, to_gpu
 
 class Dependency(NamedTuple):
     tensor: 'Tensor'
@@ -12,7 +12,7 @@ def ensure_array(arrayable: Arrayable) -> np.ndarray:
     if isinstance(arrayable, np.ndarray):
         return arrayable
     else:
-        return np.array(arrayable,dtype=np.float32)
+        return np.array(arrayable,dtype=np.float64)
 
 Tensorable = Union['Tensor',float, np.ndarray]
 
@@ -48,7 +48,7 @@ class Tensor:
         self.grad = None
 
     def zero_grad(self) -> None:
-        self.grad = Tensor(np.zeros_like(self.data,dtype=np.float32))
+        self.grad = Tensor(np.zeros_like(self.data,dtype=np.float64))
 
     def __repr__(self) -> str:
         return f"Tensor({self.data}.requires_grad={self.requires_grad})"
@@ -99,6 +99,9 @@ class Tensor:
     def __getitem__(self,idxs) -> 'Tensor':
         return _slice(self,idxs)
 
+    def __eq__(self, other) -> bool:
+        return self.data == other.data
+    
     def sum(self) -> 'Tensor':
         # raise NotImplementedError
         return tensor_sum(self)
