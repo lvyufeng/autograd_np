@@ -1,8 +1,9 @@
-from autograd.module import Module
-from autograd.parameter import Parameter
-from autograd.tensor import Tensor
-from autograd.np import np
-from autograd.functional import dropout
+from ..module import Module
+from ..parameter import Parameter
+from ..tensor import Tensor
+from ..np import np
+from .functional import dropout
+
 class Dropout(Module):
     """
     http://arxiv.org/abs/1207.0580

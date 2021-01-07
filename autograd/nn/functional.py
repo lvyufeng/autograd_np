@@ -1,5 +1,5 @@
-from autograd.np import np
-from autograd.tensor import Tensor,Dependency
+from ..np import np
+from ..tensor import Tensor, Dependency
 
 def dropout(tensor: Tensor, dropout_ratio:int=0.5, training:bool=True) -> Tensor:
     """
