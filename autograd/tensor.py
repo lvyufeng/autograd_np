@@ -33,6 +33,8 @@ class Tensor:
         self.depends_on = depends_on or []
 
         self.shape = self.data.shape
+        self.dim = self.data.ndim
+        self.size = self.data.size
         self.grad : Optional['Tensor'] = None
 
         if self.requires_grad:
@@ -106,6 +108,12 @@ class Tensor:
         # raise NotImplementedError
         return tensor_sum(self)
 
+    def mean(self) -> 'Tensor':
+        return tensor_mean(self)
+
+    def reshape(self, shape:tuple) -> 'Tensor':
+        return tensor_reshape(self, shape)
+
     def backward(self, grad: 'Tensor' = None ) -> None:
         assert self.requires_grad,"called backward on non-requires-grad tensor"
 
@@ -126,6 +134,11 @@ class Tensor:
     def cuda(self):
         return to_gpu(self._data)
 
+    def argmax(self, dim=None, keepdims=False) -> 'Tensor':
+        return _argmax(self, dim, keepdims)
+
+    def argmin(self, dim=None, keepdims=False) -> 'Tensor':
+        return _argmin(self, dim, keepdims)
 
 def tensor_sum(t:Tensor) -> Tensor:
     """
@@ -141,6 +154,54 @@ def tensor_sum(t:Tensor) -> Tensor:
             contributes that much
             """
             return grad * np.ones_like(t.data)
+
+        depends_on = [Dependency(t,grad_fn)]
+    else:
+        depends_on = []
+    
+    return Tensor(data,
+                requires_grad,
+                depends_on
+        )
+
+def tensor_mean(t:Tensor) -> Tensor:
+    """
+    Takes a tensor and returns the 0-tensor
+    that's the sum of all its elements.
+    """
+    data = t.data.mean()
+    requires_grad = t.requires_grad
+    if requires_grad:
+        def grad_fn(grad: np.ndarray) -> np.ndarray:
+            """
+            grad is necessarily a 0-tensor, so each input element
+            contributes that much
+            """
+            return grad * np.ones_like(t.data)
+
+        depends_on = [Dependency(t,grad_fn)]
+    else:
+        depends_on = []
+    
+    return Tensor(data,
+                requires_grad,
+                depends_on
+        )
+
+def tensor_reshape(t:Tensor, shape:tuple) -> Tensor:
+    """
+    Takes a tensor and returns the 0-tensor
+    that's the sum of all its elements.
+    """
+    data = t.data.reshape(shape)
+    requires_grad = t.requires_grad
+    if requires_grad:
+        def grad_fn(grad: np.ndarray) -> np.ndarray:
+            """
+            grad is necessarily a 0-tensor, so each input element
+            contributes that much
+            """
+            return grad.reshape(t.data.shape)
 
         depends_on = [Dependency(t,grad_fn)]
     else:
@@ -301,3 +362,9 @@ def _slice(t: Tensor, *idx) -> Tensor:
         depends_on = []
 
     return Tensor(data,requires_grad,depends_on)
+
+def _argmax(x:'Tensor', dim, keepdims=False) -> Tensor:
+    return Tensor(np.argmax(x.data, axis=dim, keepdims=keepdims))
+
+def _argmin(x:'Tensor', dim, keepdims=False) -> Tensor:
+    return Tensor(np.argmin(x.data, axis=dim, keepdims=keepdims))

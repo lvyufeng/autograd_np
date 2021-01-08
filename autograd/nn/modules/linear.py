@@ -1,6 +1,6 @@
-from autograd.module import Module
+from .module import Module
 from autograd.parameter import Parameter
-from autograd.tensor import Tensor
+from autograd import Tensor
 
 class Linear(Module):
     """

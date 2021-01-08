@@ -1,5 +1,5 @@
-from .tensor import Tensor
-from .np import np
+from autograd import Tensor
+from autograd.np import np
 
 class Parameter(Tensor):
     def __init__(self, *shape) -> None:

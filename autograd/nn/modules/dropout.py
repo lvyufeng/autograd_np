@@ -1,8 +1,6 @@
-from ..module import Module
-from ..parameter import Parameter
-from ..tensor import Tensor
-from ..np import np
-from .functional import dropout
+from .module import Module
+from autograd import Tensor, Parameter, np
+from ..functional import dropout
 
 class Dropout(Module):
     """
