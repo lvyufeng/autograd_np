@@ -1,7 +1,8 @@
 from .tensor import Tensor
 from .parameter import Parameter
-from .module import Module
+from .nn.modules.module import Module
 from .utils import *
+from .np import np
 
-def argmax(x:'Tensor', axis, keepdims=False):
-    return Tensor(np.argmax(x.data, axis=axis, keepdims=keepdims))
+from .tensor import tensor_sum as sum
+from .tensor import _argmax as argmax

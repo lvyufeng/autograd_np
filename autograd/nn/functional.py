@@ -46,3 +46,15 @@ def sigmoid(tensor: Tensor) -> Tensor:
     else:
         depends_on = []
     return Tensor(data, requires_grad, depends_on)
+
+
+def cross_entropy(input:Tensor, target:Tensor) -> Tensor:
+    y = input.data
+    t = target.data
+    if y.dim == 1:
+        y = y.reshape(1, y.size)
+        t = t.reshape(1, t.size)
+    if y.size == t.size:
+        t = t.argmax(axis=1)
+    batch_size = y.shape[0]
+    return Tensor(-np.sum(np.log(y[np.arange(batch_size), t] + 1e-7)) / batch_size)

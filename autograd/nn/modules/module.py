@@ -1,5 +1,4 @@
-from .tensor import Tensor
-from .parameter import Parameter
+from autograd import Tensor, Parameter
 
 from typing import Iterator
 
