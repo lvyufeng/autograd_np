@@ -58,3 +58,10 @@ def cross_entropy(input:Tensor, target:Tensor) -> Tensor:
         t = t.argmax(axis=1)
     batch_size = y.shape[0]
     return Tensor(-np.sum(np.log(y[np.arange(batch_size), t] + 1e-7)) / batch_size)
+
+def binary_cross_entropy():
+    pass
+
+def mean_squard_error():
+    pass
+

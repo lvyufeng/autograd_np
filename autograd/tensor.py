@@ -135,10 +135,10 @@ class Tensor:
         return to_gpu(self._data)
 
     def argmax(self, dim=None, keepdims=False) -> 'Tensor':
-        return _argmax(self, dim, keepdims)
+        return tensor_argmax(self, dim, keepdims)
 
     def argmin(self, dim=None, keepdims=False) -> 'Tensor':
-        return _argmin(self, dim, keepdims)
+        return tensor_argmin(self, dim, keepdims)
 
 def tensor_sum(t:Tensor) -> Tensor:
     """
@@ -211,6 +211,12 @@ def tensor_reshape(t:Tensor, shape:tuple) -> Tensor:
                 requires_grad,
                 depends_on
         )
+def tensor_argmax(x:'Tensor', dim, keepdims=False) -> Tensor:
+    return Tensor(np.argmax(x.data, axis=dim, keepdims=keepdims))
+
+def tensor_argmin(x:'Tensor', dim, keepdims=False) -> Tensor:
+    return Tensor(np.argmin(x.data, axis=dim, keepdims=keepdims))
+
 
 def _add(t1: Tensor, t2:Tensor) -> Tensor:
 
@@ -363,8 +369,3 @@ def _slice(t: Tensor, *idx) -> Tensor:
 
     return Tensor(data,requires_grad,depends_on)
 
-def _argmax(x:'Tensor', dim, keepdims=False) -> Tensor:
-    return Tensor(np.argmax(x.data, axis=dim, keepdims=keepdims))
-
-def _argmin(x:'Tensor', dim, keepdims=False) -> Tensor:
-    return Tensor(np.argmin(x.data, axis=dim, keepdims=keepdims))
