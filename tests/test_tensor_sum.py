@@ -1,6 +1,7 @@
 import unittest
 
 from autograd.tensor import Tensor
+
 class TestTensorSum(unittest.TestCase):
     def test_simple_sum(self):
         t1 = Tensor([1,2,3],requires_grad=True)

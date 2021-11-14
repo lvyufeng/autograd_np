@@ -1,6 +1,6 @@
 import numpy as np
 
-from autograd import Tensor,Parameter,Module
+from autograd import Tensor, Parameter, Module
 from autograd.optim import SGD
 
 x_data = Tensor(np.random.randn(100,3))
@@ -16,9 +16,9 @@ class Model(Module):
     def predict(self, inputs: Tensor) -> Tensor:
         return inputs @ self.w + self.b
 
-optimizer = SGD(0.001)
 batch_size = 32
 model = Model()
+optimizer = SGD(model.parameters(), 0.001)
 
 for epoch in range(100):
    
@@ -39,7 +39,7 @@ for epoch in range(100):
         loss.backward()
         epoch_loss += loss.data
 
-        optimizer.step(model)
+        optimizer.step()
         
     print(epoch,epoch_loss)
 

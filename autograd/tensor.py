@@ -50,7 +50,7 @@ class Tensor:
         self.grad = None
 
     def zero_grad(self) -> None:
-        self.grad = Tensor(np.zeros_like(self.data,dtype=np.float64))
+        self.grad = Tensor(np.zeros_like(self.data, dtype=np.float32))
 
     def __repr__(self) -> str:
         return f"Tensor({self.data}.requires_grad={self.requires_grad})"

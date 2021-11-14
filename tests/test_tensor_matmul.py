@@ -1,5 +1,7 @@
 import unittest
 import numpy as np
+import cupy as cp
+
 from autograd.tensor import Tensor
 class TestTensorMul(unittest.TestCase):
     def test_simple_matmul(self):
@@ -12,7 +14,7 @@ class TestTensorMul(unittest.TestCase):
         grad = Tensor([[-1],[-2],[-3]])
         t3.backward(grad)
 
-        np.testing.assert_array_equal(t1.grad.data,grad.data @ t2.data.T)
-        np.testing.assert_array_equal(t2.grad.data,t1.data.T @ grad.data)
+        cp.testing.assert_array_almost_equal(t1.grad.data,grad.data @ t2.data.T)
+        cp.testing.assert_array_almost_equal(t2.grad.data,t1.data.T @ grad.data)
 
         

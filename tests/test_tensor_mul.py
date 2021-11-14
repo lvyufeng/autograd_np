@@ -1,6 +1,8 @@
 import unittest
 import numpy as np
+import cupy as cp
 from autograd.tensor import Tensor
+
 class TestTensorMul(unittest.TestCase):
     def test_simple_mul(self):
         t1 = Tensor([1,2,3],requires_grad=True)
@@ -16,7 +18,7 @@ class TestTensorMul(unittest.TestCase):
 
         t1 *= 0.1
         assert t1.grad is None
-        np.testing.assert_almost_equal(t1.data,[0.1, 0.2, 0.3])
+        cp.testing.assert_array_almost_equal(t1.data, [0.1, 0.2, 0.3])
         # assert t1.data.tolist() == [0.1, 0.2, 0.3]
 
     def test_broadcast_mul(self):
